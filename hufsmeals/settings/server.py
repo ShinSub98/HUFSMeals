@@ -57,6 +57,9 @@ INSTALLED_APPS = [
 
     # simple-jwt
     'rest_framework_simplejwt',
+
+    # project apps
+    'accounts',
 ]
 
 MIDDLEWARE = [
