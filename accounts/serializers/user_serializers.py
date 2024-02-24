@@ -1,19 +1,10 @@
 from rest_framework import serializers
-from models import User
+from ..models import User
 
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserInfoSerializer(serializers.ModelSerializer):
     """
-    유저의 모든 정보 시리얼라이저
+    유저의 정보 시리얼라이저
     """
     class Meta:
         model = User
-        fields = '__all__'
-
-
-class UserSimpleSerializer(serializers.ModelSerializer):
-    """
-    유저의 간단한 정보 시리얼라이저
-    """
-    class Meta:
-        models = User
-        fields = ['id', 'nickname', 'language', 'is_banned']
+        fields = ['id', 'nickname', 'language', 'is_banned', 'email', 'is_banned', 'is_staff']

@@ -2,24 +2,27 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, google_id, language, nickname, password=None):
+    def create_user(self, google_id, language, nickname, email, password=None):
         user = self.model(
             google_id = google_id,
             language = language,
             nickname = nickname,
+            email = email,
             password = password,
         )
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, google_id, language, nickname, password=None):
+    def create_superuser(self, google_id, language, nickname, email, password=None):
         user = self.model(
             google_id = google_id,
             password = password,
             language = language,
+            email = email,
             nickname = nickname
         )
         user.is_staff = True
+        user.is_superuser = True
         user.save(using = self.db)
         return user
 
@@ -40,13 +43,16 @@ class User(AbstractBaseUser):
         ('it', '이탈리아어'),
         ('fr', '프랑스어')
     )
-    google_id = models.IntegerField(max_length = 255, unique = True)
+    google_id = models.CharField(max_length = 30, unique = True)
     language = models.CharField(max_length = 10, choices = LANGUAGE_CODE, default = 'ko')
     nickname = models.CharField(max_length = 60)
+    email = models.EmailField(max_length = 255, unique = True, default = "")
     is_banned = models.BooleanField(default = False)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'google_id'
-    REQUIRED_FIELDS = ['nickname', 'language']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['nickname', 'language', 'google_id']
 
     objects = UserManager()
 
