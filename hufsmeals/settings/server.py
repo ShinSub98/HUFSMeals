@@ -71,6 +71,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+	'http://localhost:3000',
+    'https://localhost:3000',
+]
+
+CSRF_TRUSTED_ORIGINS = []
+
 ROOT_URLCONF = 'hufsmeals.urls'
 
 TEMPLATES = [
