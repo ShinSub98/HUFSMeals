@@ -2,9 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, google_id, language, nickname, email, password=None):
+    def create_user(self, google_id, family_name, given_name, language, nickname, email, password=None):
         user = self.model(
             google_id = google_id,
+            family_name = family_name,
+            given_name = given_name,
             language = language,
             nickname = nickname,
             email = email,
@@ -13,9 +15,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, google_id, language, nickname, email, password=None):
+    def create_superuser(self, google_id, family_name, given_name, language, nickname, email, password=None):
         user = self.model(
             google_id = google_id,
+            family_name = family_name,
+            given_name = given_name,
             password = password,
             language = language,
             email = email,
@@ -44,6 +48,8 @@ class User(AbstractBaseUser):
         ('fr', '프랑스어')
     )
     google_id = models.CharField(max_length = 30, unique = True)
+    family_name = models.CharField(max_length = 60, default = "")
+    given_name = models.CharField(max_length = 60, default = "")
     language = models.CharField(max_length = 10, choices = LANGUAGE_CODE, default = 'ko')
     nickname = models.CharField(max_length = 60)
     email = models.EmailField(max_length = 255, unique = True, default = "")
@@ -57,7 +63,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.nickname
+        return self.email
     
     def has_perm(self, perm, obj=None):
         """
