@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 
     # simple-jwt
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 
     # project apps
     'accounts',
@@ -141,8 +142,8 @@ AUTH_PASSWORD_VALIDATORS = [
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
