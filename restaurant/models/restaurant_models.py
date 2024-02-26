@@ -12,12 +12,11 @@ class Restaurant(models.Model):
     score_accum = models.IntegerField(default = 0, verbose_name = '리뷰 합산 점수')
     score_avg = models.FloatField(default = 0.0, verbose_name = '리뷰 평균 점수')
 
-    def save(self, *args, **kwargs):
-        if self.review_cnt > 0:
-            self.score_avg = round(self.score_accum / self.review_cnt, 2)
-        else:
-            self.score_avg = 0.0
-        super().save(*args, **kwargs)
+    def add_review(self, score):
+        self.review_cnt += 1
+        self.score_accum += score
+        self.score_avg = round(self.score_accum / self.review_cnt, 2)
+        self.save()
 
     class Meta:
         db_table = 'restaurant'
