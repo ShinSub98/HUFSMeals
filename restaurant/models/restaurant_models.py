@@ -16,8 +16,8 @@ def menu_upload_to(instance, filename):
 class Restaurant(models.Model):
     name = models.CharField(max_length = 90, default = "식당 이름")
     restaurant_image = models.ImageField(upload_to = restaurant_upload_to, null = True, blank = True, verbose_name = '식당 이미지')
-    latitude = models.CharField(max_length = 90, default = None, verbose_name = '위도')
-    longitude = models.CharField(max_length = 90, default = None, verbose_name = '경도')
+    latitude = models.CharField(max_length = 90, blank = True, default = None, verbose_name = '위도')
+    longitude = models.CharField(max_length = 90, blank = True, default = None, verbose_name = '경도')
     opening_hours = models.CharField(max_length = 255, default = None, verbose_name = '영업 시간')
     address = models.CharField(max_length = 255, default = None, verbose_name = '주소')
     phone = models.CharField(max_length = 90, default = None, verbose_name = '전화번호')
