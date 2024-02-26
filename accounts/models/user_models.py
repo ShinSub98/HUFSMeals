@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 class UserManager(BaseUserManager):
     def create_user(self, google_id, family_name, given_name, language, nickname, email, password=None):
@@ -15,23 +15,24 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, google_id, family_name, given_name, language, nickname, email, password=None):
+    def create_superuser(self, google_id, family_name, given_name, language, nickname, email, password):
         user = self.model(
             google_id = google_id,
             family_name = family_name,
             given_name = given_name,
-            password = password,
+            # password = password,
             language = language,
             email = email,
             nickname = nickname
         )
+        user.set_password(password)
         user.is_staff = True
         user.is_superuser = True
         user.save(using = self.db)
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     LANGUAGE_CODE = (
         ('ko', '한국어'),
         ('en', '영어'),
@@ -58,18 +59,13 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nickname', 'language', 'google_id']
+    REQUIRED_FIELDS = ['nickname', 'language', 'google_id', 'family_name', 'given_name']
 
     objects = UserManager()
 
     def __str__(self):
         return self.email
-    
-    def has_perm(self, perm, obj=None):
-        """
-        스태프에게는 전권한 부여
-        """
-        return self.is_staff
+
     
     class Meta:
         db_table = 'user'
